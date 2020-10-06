@@ -1,0 +1,11 @@
+{
+  "name": "pep-stat-updater",
+  "version": "1.0.0",
+  "main": "handler.js",
+  "repository": "https://repo.gavant.com/pep/pep-stat-updater.git",
+  "author": "Gavant Software",
+  "license": "MIT",
+  "dependencies": {
+    "node-ssh": "^11.1.1"
+  }
+}

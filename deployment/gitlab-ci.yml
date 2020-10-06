@@ -1,0 +1,49 @@
+stages:
+- build
+- deploy_to_staging
+- deploy_to_production
+
+build:
+    stage: build
+    script:
+    - nvm install $NodeVersion
+    - nvm use $NodeVersion
+    - yarn install --cwd $SvcName --frozen-lockfile
+    - ls -lah
+    - cp -r app $SvcName/
+    - cd $SvcName
+    - ls -lah
+    artifacts:
+        name: "$SvcName-$CI_PIPELINE_ID"
+        paths:
+        - $SvcName
+
+staging:
+    stage: deploy_to_staging
+    when: manual
+    environment:
+        name: staging
+    before_script:
+    - bash deployment/utilities.sh SetAwsProfile
+    - bash deployment/utilities.sh SetServerlessProfile
+    script:
+    - export PEM_FILE="TEST" # - SECRET_ARN=$(bash deployment/utilities.sh AwsEncrypt $AuroraSecret_Cand $AwsEncryptKey)
+    - cd $SvcName-$CI_PIPELINE_ID
+    - sls deploy --stage $AwsStage
+    variables:
+        AwsStage: "staging"
+
+
+production:
+    stage: deploy_to_production
+    when: manual
+    environment:
+        name: production
+    before_script:
+    - bash deployment/utilities.sh SetAwsProfile
+    - bash deployment/utilities.sh SetServerlessProfile
+    script:
+    - cd $SvcName-$CI_PIPELINE_ID
+    - sls deploy --stage $AwsStage
+    variables:
+        AwsStage: "production"

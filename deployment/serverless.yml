@@ -1,0 +1,20 @@
+service: ${env:SvcName}
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: ${env:AwsRegion}
+  stage: ${env:AwsStage}
+  profile: ${env:SvcName}-${env:AwsStage}
+  memorySize: 1024
+  timeout: 900
+  environment:
+    PEM_FILE: ${env:PEM_FILE}
+
+functions:
+  stat-updater:
+    handler: app/handler.handler
+    events:
+      - schedule: cron(0 03 * * ? *)
+
