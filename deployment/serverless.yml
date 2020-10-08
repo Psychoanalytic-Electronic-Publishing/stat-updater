@@ -1,5 +1,4 @@
 service: ${env:SvcName}
-frameworkVersion: '2'
 
 provider:
   name: aws
@@ -9,11 +8,27 @@ provider:
   profile: ${env:SvcName}-${env:AwsStage}
   memorySize: 1024
   timeout: 900
+  role: "arn:aws:iam::547758924192:role/stat-updater-lambda-role"
+  vpc:
+      securityGroupIds:
+      - "sg-0a97fbfa3e8ac6431"
+      subnetIds:
+      - "subnet-07aaf2d2cb7a289b3"
+      - "subnet-0823c9858aac44f9d"
+      - "subnet-0fe45c6df48d432f8"
+      - "subnet-0125c5ee10694c1cb"
+      - "subnet-0a4df6febf1094084"
+      - "subnet-0b4e6c85c4abfc77d"
   environment:
-    PEM_FILE: ${env:PEM_FILE}
+    ENVIRONMENT: ${env:AwsStage}
+    REGION: ${env:REGION}
+    HOST: ${env:HOST}
+    USERNAME: ${env:USERNAME}
+    PEM: ${env:PEM}
+
 
 functions:
-  stat-updater:
+  app:
     handler: app/handler.handler
     events:
       - schedule: cron(0 03 * * ? *)

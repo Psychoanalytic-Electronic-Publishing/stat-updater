@@ -8,15 +8,12 @@ build:
     script:
     - nvm install $NodeVersion
     - nvm use $NodeVersion
-    - yarn install --cwd $SvcName --frozen-lockfile
-    - ls -lah
-    - cp -r app $SvcName/
-    - cd $SvcName
+    - yarn install --frozen-lockfile
     - ls -lah
     artifacts:
         name: "$SvcName-$CI_PIPELINE_ID"
         paths:
-        - $SvcName
+        - node_modules
 
 staging:
     stage: deploy_to_staging
@@ -27,12 +24,14 @@ staging:
     - bash deployment/utilities.sh SetAwsProfile
     - bash deployment/utilities.sh SetServerlessProfile
     script:
-    - export PEM_FILE="TEST" # - SECRET_ARN=$(bash deployment/utilities.sh AwsEncrypt $AuroraSecret_Cand $AwsEncryptKey)
-    - cd $SvcName-$CI_PIPELINE_ID
+    - cp deployment/serverless.yml .
     - sls deploy --stage $AwsStage
     variables:
         AwsStage: "staging"
-
+        REGION: "$AwsRegion"
+        USERNAME: "$Username"
+        HOST: "$Host"
+        PEM: "$BuildMachinePem"
 
 production:
     stage: deploy_to_production
@@ -43,7 +42,11 @@ production:
     - bash deployment/utilities.sh SetAwsProfile
     - bash deployment/utilities.sh SetServerlessProfile
     script:
-    - cd $SvcName-$CI_PIPELINE_ID
+    - cp deployment/serverless.yml .
     - sls deploy --stage $AwsStage
     variables:
         AwsStage: "production"
+        REGION: "$AwsRegion"
+        USERNAME: "$Username"
+        HOST: "$Host"
+        PEM: "$BuildMachinePem"
