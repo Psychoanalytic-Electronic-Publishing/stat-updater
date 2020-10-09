@@ -31,7 +31,8 @@ staging:
         REGION: "$AwsRegion"
         USERNAME: "$Username"
         HOST: "$Host"
-        PEM: "$BuildMachinePem"
+        PEM_KEY: "$PemKey"
+        S3_BUCKET: "$S3Bucket"
 
 production:
     stage: deploy_to_production
@@ -49,4 +50,5 @@ production:
         REGION: "$AwsRegion"
         USERNAME: "$Username"
         HOST: "$Host"
-        PEM: "$BuildMachinePem"
+        PEM_KEY: "$PemKey"
+        S3_BUCKET: "$S3Bucket"

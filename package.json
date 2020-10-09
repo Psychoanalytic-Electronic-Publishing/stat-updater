@@ -6,6 +6,7 @@
   "author": "Gavant Software",
   "license": "MIT",
   "dependencies": {
+    "aws-sdk": "^2.771.0",
     "node-ssh": "^11.1.1"
   }
 }

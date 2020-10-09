@@ -24,7 +24,8 @@ provider:
     REGION: ${env:REGION}
     HOST: ${env:HOST}
     USERNAME: ${env:USERNAME}
-    PEM: ${env:PEM}
+    PEM_KEY: ${env:PEM_KEY}
+    S3_BUCKET: ${env:S3_BUCKET}
 
 
 functions:
