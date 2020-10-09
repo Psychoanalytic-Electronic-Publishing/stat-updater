@@ -4,7 +4,7 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const fs = require('fs');
 
-function saveS3ToFile (bucket, key, destPath) {
+function saveS3ToFile(bucket, key, destPath) {
   var params = {
     Bucket: bucket,
     Key: key
@@ -44,11 +44,11 @@ module.exports.handler = async event => {
       console.log('SIGNAL: ' + result.signal)
 
       if (result.code !== 0 && result.code !== null) {
-        throw new Error("Scheduled OpasStatUpdater process failed on " + process.env.ENVIRONMENT);
+        throw new Error('Scheduled OpasStatUpdater process failed on ' + process.env.ENVIRONMENT);
       }
     })
   } else {
-    console.log('Not Connected to build machine')
+    throw new Error("Unable to connect to build machine");
   }
 
   return { message: 'Scheduled OpasStatUpdater process completed', event };
