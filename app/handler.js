@@ -4,6 +4,25 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const fs = require('fs');
 
+let script = `
+  export UtilitiesUrl="${process.env.UTILITIES_URL}";
+  export ConfigurationBucket="${process.env.S3_BUCKET}";
+  export SvcName="pep-stat-updater-${process.env.ENVIRONMENT}";
+  mkdir -p /home/ubuntu/stat-update-cron &&
+  cd /home/ubuntu/stat-update-cron/ &&
+  rm -rf $SvcName &&
+  mkdir -p $SvcName &&
+  cd $SvcName &&
+  git clone https://github.com/Psychoanalytic-Electronic-Publishing/OpenPubArchive-Content-Server.git . &&
+  git checkout Stage &&
+  wget $UtilitiesUrl &&
+  bash -x utilities.sh BuildAndRunStatUpdater "${process.env.ENVIRONMENT}" "" "$SvcName";
+  ExitStatus=$?;
+  echo $ExitStatus;
+  bash utilities.sh CleanupDockerBuild "$SvcName";
+  exit $ExitStatus;
+`
+
 function saveS3ToFile(bucket, key, destPath) {
   var params = {
     Bucket: bucket,
@@ -37,7 +56,7 @@ module.exports.handler = async event => {
 
   if (connection.isConnected()) {
     console.log('Connected')
-    await connection.execCommand(`sudo bash -x stat-update-utility.sh "${process.env.ENVIRONMENT}" ""`, { cwd: '/home/ubuntu/stat-update-cron' }).then(function (result) {
+    await connection.execCommand(script, { cwd: '/home/ubuntu' }).then(function (result) {
       console.log('STDOUT: ' + result.stdout)
       console.log('STDERR: ' + result.stderr)
       console.log('CODE: ' + result.code)
