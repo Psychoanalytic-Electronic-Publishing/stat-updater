@@ -26,6 +26,7 @@ provider:
     USERNAME: ${env:USERNAME}
     PEM_KEY: ${env:PEM_KEY}
     S3_BUCKET: ${env:S3_BUCKET}
+    UTILITIES_URL: ${env:UTILITIES_URL}
 
 
 functions:
