@@ -67,7 +67,7 @@ module.exports.handler = async event => {
       }
     })
   } else {
-    throw new Error("Unable to connect to build machine");
+    throw new Error('Unable to connect to build machine');
   }
 
   return { message: 'Scheduled OpasStatUpdater process completed', event };
