@@ -34,6 +34,7 @@ staging:
         PEM_KEY: "$PemKey"
         S3_BUCKET: "$S3Bucket"
         UTILITIES_URL: "$UtilitiesUrl"
+        ALARM_TOPIC: "$AlarmTopic_Stage"
 
 production:
     stage: deploy_to_production
@@ -54,3 +55,4 @@ production:
         PEM_KEY: "$PemKey"
         S3_BUCKET: "$S3Bucket"
         UTILITIES_URL: "$UtilitiesUrl"
+        ALARM_TOPIC: "$AlarmTopic_Prod"

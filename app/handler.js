@@ -15,11 +15,10 @@ let script = `
   cd $SvcName &&
   git clone https://github.com/Psychoanalytic-Electronic-Publishing/OpenPubArchive-Content-Server.git . &&
   git checkout Stage &&
-  wget $UtilitiesUrl &&
-  bash -x utilities.sh BuildAndRunStatUpdater "${process.env.ENVIRONMENT}" "" "$SvcName";
+  wget $UtilitiesUrl
+  bash -x utilities.sh BuildAndRunStatUpdater "${process.env.ENVIRONMENT}" "" "$SvcName" "_$SvcName"
   ExitStatus=$?;
   echo $ExitStatus;
-  bash utilities.sh CleanupDockerBuild "$SvcName";
   exit $ExitStatus;
 `
 
