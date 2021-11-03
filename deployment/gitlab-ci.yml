@@ -35,6 +35,12 @@ staging:
         S3_BUCKET: "$S3Bucket"
         UTILITIES_URL: "$UtilitiesUrl"
         ALARM_TOPIC: "$AlarmTopic_Stage"
+        MYSQL_HOST: "$MysqlHost_Stage"
+        MYSQL_USERNAME: "$MysqUsername_Stage"
+        MYSQL_PASSWORD: "$MysqPassword_Stage"
+        MYSQL_SCHEMA: "$MysqSchema_Stage"
+        S3_ARCHIVE_BUCKET: "$S3ArchiveBucket_Stage"
+        ARCHIVE_THRESHOLD_DAYS: "$ArchiveThresholdDays_Stage"
 
 production:
     stage: deploy_to_production
@@ -56,3 +62,9 @@ production:
         S3_BUCKET: "$S3Bucket"
         UTILITIES_URL: "$UtilitiesUrl"
         ALARM_TOPIC: "$AlarmTopic_Prod"
+        MYSQL_HOST: "$MysqlHost_Prod"
+        MYSQL_USERNAME: "$MysqUsername_Prod"
+        MYSQL_PASSWORD: "$MysqPassword_Prod"
+        MYSQL_SCHEMA: "$MysqSchema_Prod"
+        S3_ARCHIVE_BUCKET: "$S3ArchiveBucket_Prod"
+        ARCHIVE_THRESHOLD_DAYS: "$ArchiveThresholdDays_Prod"

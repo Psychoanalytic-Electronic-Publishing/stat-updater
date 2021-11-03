@@ -27,13 +27,30 @@ provider:
     PEM_KEY: ${env:PEM_KEY}
     S3_BUCKET: ${env:S3_BUCKET}
     UTILITIES_URL: ${env:UTILITIES_URL}
+    MYSQL_HOST: ${env:MYSQL_HOST}
+    MYSQL_USERNAME: ${env:MYSQL_USERNAME}
+    MYSQL_PASSWORD: ${env:MYSQL_PASSWORD}
+    MYSQL_SCHEMA: ${env:MYSQL_SCHEMA}
+    S3_ARCHIVE_BUCKET: ${env:S3_ARCHIVE_BUCKET}
+    ARCHIVE_THRESHOLD_DAYS: ${env:ARCHIVE_THRESHOLD_DAYS}
 
 
 functions:
   app:
     handler: app/handler.handler
     events:
-      - schedule: cron(0 03 * * ? *)
+      - schedule:
+          name: ${env:SvcName}-${env:AwsStage}
+          rate: cron(0 03 * * ? *)
+          input:
+            eventType: "stat_update"
+          enabled: true
+      - schedule:
+          name: database-archival-${env:AwsStage}
+          rate: cron(0 06 * * ? *)
+          input:
+            eventType: "database_archival"
+          enabled: true
 
 
 resources:
