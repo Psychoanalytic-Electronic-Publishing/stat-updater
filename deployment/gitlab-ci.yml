@@ -41,6 +41,7 @@ staging:
         MYSQL_SCHEMA: "$MysqSchema_Stage"
         S3_ARCHIVE_BUCKET: "$S3ArchiveBucket_Stage"
         ARCHIVE_THRESHOLD_DAYS: "$ArchiveThresholdDays_Stage"
+        SNS_TOPIC: "$SnsTopic_Stage"
 
 production:
     stage: deploy_to_production
@@ -68,3 +69,4 @@ production:
         MYSQL_SCHEMA: "$MysqSchema_Prod"
         S3_ARCHIVE_BUCKET: "$S3ArchiveBucket_Prod"
         ARCHIVE_THRESHOLD_DAYS: "$ArchiveThresholdDays_Prod"
+        SNS_TOPIC: "$SnsTopic_Prod"

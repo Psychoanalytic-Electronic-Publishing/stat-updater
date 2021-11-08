@@ -3,20 +3,27 @@ const { NodeSSH } = require('node-ssh')
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const fs = require('fs');
+const now = Date.now();
 
 function get_stat_update_script(){
   return `
     export UtilitiesUrl="${process.env.UTILITIES_URL}";
     export ConfigurationBucket="${process.env.S3_BUCKET}";
     export SvcName="pep-stat-updater-${process.env.ENVIRONMENT}";
-    mkdir -p /home/ubuntu/stat-update-cron &&
-    cd /home/ubuntu/stat-update-cron/ &&
-    rm -rf $SvcName &&
-    mkdir -p $SvcName &&
-    cd $SvcName &&
-    git clone https://github.com/Psychoanalytic-Electronic-Publishing/OpenPubArchive-Content-Server.git . &&
-    git checkout Stage &&
-    wget $UtilitiesUrl
+
+    export SnsTopic="${process.env.SNS_TOPIC}";
+    export Subject="(STARUP) Daily Stat Update";
+    export Message="Daily stat update process has begun";
+
+    mkdir -p /home/ubuntu/stat-update-cron && \
+    cd /home/ubuntu/stat-update-cron/ && \
+    rm -rf $SvcName && \
+    mkdir -p $SvcName && \
+    cd $SvcName && \
+    git clone https://github.com/Psychoanalytic-Electronic-Publishing/OpenPubArchive-Content-Server.git . && \
+    git checkout Stage && \
+    wget $UtilitiesUrl &&  \
+    bash -x utilities.sh SendGenericEmail
     screen -d -m bash -x utilities.sh BuildAndRunStatUpdater "${process.env.ENVIRONMENT}" "" "$SvcName" "_$SvcName"
     ExitStatus=$?;
     echo $ExitStatus;
@@ -40,16 +47,21 @@ function get_archive_script(tableName){
     export MysqlSchema="${process.env.MYSQL_SCHEMA}";
     export TableName="${tableName}";
     export DateThreshold="${get_date_threshold()}";
-    export OutputFilename="$TableName"-${process.env.ENVIRONMENT}-"$DateThreshold.sql"
+    export OutputFilename="$TableName"-${process.env.ENVIRONMENT}-"$DateThreshold-${now}.sql"
     export S3ArchiveBucket="${process.env.S3_ARCHIVE_BUCKET}";
 
-    mkdir -p /home/ubuntu/archival-utility &&
-    cd /home/ubuntu/archival-utility/ &&
-    rm -rf $SvcName &&
-    mkdir -p $SvcName &&
-    cd $SvcName &&
-    wget $UtilitiesUrl &&
-    bash -x utilities.sh ExportSessionsTable &&
+    export SnsTopic="${process.env.SNS_TOPIC}";
+    export Subject="(STARUP) ${tableName} archival";
+    export Message="${tableName} archival process has begun";
+
+    mkdir -p /home/ubuntu/archival-utility && \
+    cd /home/ubuntu/archival-utility/ && \
+    rm -rf $SvcName && \
+    mkdir -p $SvcName && \
+    cd $SvcName && \
+    wget $UtilitiesUrl && \
+    bash -x utilities.sh SendGenericEmail && \
+    bash -x utilities.sh ExportSessionsTable && \
     bash -x utilities.sh TrimSessionsTable
     ExitStatus=$?;
     echo $ExitStatus;
