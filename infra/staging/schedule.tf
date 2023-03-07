@@ -22,7 +22,7 @@ resource "aws_lambda_permission" "allow_stat_update_schedule_to_run_lambda" {
 resource "aws_cloudwatch_event_rule" "schedule_database_archival" {
   name                = "${var.stack_name}-database-archival-schedule-${var.env}"
   description         = "Trigger database archival at 06:00 UTC each day"
-  schedule_expression = "cron(0 06 * * ? *)" # 03:00 UTC
+  schedule_expression = "cron(0 06 * * ? *)" # 06:00 UTC
 }
 
 resource "aws_cloudwatch_event_target" "schedule_database_archival_target" {
