@@ -1,11 +1,11 @@
-'use strict';
-const { NodeSSH } = require('node-ssh')
-const AWS = require('aws-sdk');
+"use strict";
+const { NodeSSH } = require("node-ssh");
+const AWS = require("aws-sdk");
 const s3 = new AWS.S3();
-const fs = require('fs');
+const fs = require("fs");
 const now = Date.now();
 
-function get_stat_update_script(){
+function get_stat_update_script() {
   return `
     export UtilitiesUrl="${process.env.UTILITIES_URL}";
     export ConfigurationBucket="${process.env.S3_BUCKET}";
@@ -28,16 +28,16 @@ function get_stat_update_script(){
     ExitStatus=$?;
     echo $ExitStatus;
     exit $ExitStatus;
-  `
+  `;
 }
 
 function get_date_threshold() {
   let d = new Date();
   d.setDate(d.getDate() - process.env.ARCHIVE_THRESHOLD_DAYS);
-  return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
-function get_archive_script(tableName){
+function get_archive_script(tableName) {
   return `
     export SvcName="archival-utility-${process.env.ENVIRONMENT}";
     export UtilitiesUrl="${process.env.UTILITIES_URL}";
@@ -47,7 +47,9 @@ function get_archive_script(tableName){
     export MysqlSchema="${process.env.MYSQL_SCHEMA}";
     export TableName="${tableName}";
     export DateThreshold="${get_date_threshold()}";
-    export OutputFilename="$TableName"-${process.env.ENVIRONMENT}-"$DateThreshold-${now}.sql"
+    export OutputFilename="$TableName"-${
+      process.env.ENVIRONMENT
+    }-"$DateThreshold-${now}.sql"
     export S3ArchiveBucket="${process.env.S3_ARCHIVE_BUCKET}";
 
     export SnsTopic="${process.env.SNS_TOPIC}";
@@ -66,27 +68,28 @@ function get_archive_script(tableName){
     ExitStatus=$?;
     echo $ExitStatus;
     exit $ExitStatus;
-  `
+  `;
 }
 
 function saveS3ToFile(bucket, key, destPath) {
   var params = {
     Bucket: bucket,
-    Key: key
-  }
+    Key: key,
+  };
   let file = fs.createWriteStream(destPath);
 
   return new Promise((resolve, reject) => {
-    s3.getObject(params).createReadStream()
-      .on('end', () => {
+    s3.getObject(params)
+      .createReadStream()
+      .on("end", () => {
         return resolve(destPath);
       })
-      .on('error', (error) => {
+      .on("error", (error) => {
         return reject(error);
-      }).pipe(file);
+      })
+      .pipe(file);
   });
-};
-
+}
 
 async function executeSSHCommand(pemPath, process_type, script) {
   const sshClient = new NodeSSH();
@@ -94,38 +97,50 @@ async function executeSSHCommand(pemPath, process_type, script) {
   const connection = await sshClient.connect({
     username: `${process.env.USERNAME}`,
     host: `${process.env.HOST}`,
-    privateKey: pemPath
+    privateKey: pemPath,
   });
 
   if (connection.isConnected()) {
-    console.log('Connected')
-    await connection.execCommand(script, { cwd: '/home/ubuntu' }).then(function (result) {
-      console.log('STDOUT: ' + result.stdout)
-      console.log('STDERR: ' + result.stderr)
-      console.log('CODE: ' + result.code)
-      console.log('SIGNAL: ' + result.signal)
+    console.log("Connected");
+    await connection
+      .execCommand(script, { cwd: "/home/ubuntu" })
+      .then(function (result) {
+        console.log("STDOUT: " + result.stdout);
+        console.log("STDERR: " + result.stderr);
+        console.log("CODE: " + result.code);
+        console.log("SIGNAL: " + result.signal);
 
-      if (result.code !== 0 && result.code !== null) {
-        throw new Error(process_type + ' process failed on ' + process.env.ENVIRONMENT);
-      }
-    })
+        if (result.code !== 0 && result.code !== null) {
+          throw new Error(
+            process_type + " process failed on " + process.env.ENVIRONMENT
+          );
+        }
+      });
   } else {
-    throw new Error('Unable to connect to build machine');
+    throw new Error("Unable to connect to build machine");
   }
 }
 
-module.exports.handler = async event => {
-  console.log('Running Utility')
-  console.log(event)
+module.exports.handler = async (event) => {
+  console.log("Running Utility");
+  console.log(event);
   let pemPath = `/tmp/${process.env.PEM_KEY}`;
-  await saveS3ToFile(process.env.S3_BUCKET, process.env.PEM_KEY, pemPath)
+  await saveS3ToFile(process.env.S3_BUCKET, process.env.PEM_KEY, pemPath);
 
-  if (event.eventType === 'stat_update') {
-    await executeSSHCommand(pemPath, "Stat Update", get_stat_update_script())
-  } else if (event.eventType === 'database_archival') {
-    await executeSSHCommand(pemPath, "Archival", get_archive_script('api_session_endpoints'))
-    await executeSSHCommand(pemPath, "Archival", get_archive_script('api_session_endpoints_not_logged_in'))
+  if (event.eventType === "stat_update") {
+    await executeSSHCommand(pemPath, "Stat Update", get_stat_update_script());
+  } else if (event.eventType === "database_archival") {
+    await executeSSHCommand(
+      pemPath,
+      "Archival",
+      get_archive_script("api_session_endpoints")
+    );
+    await executeSSHCommand(
+      pemPath,
+      "Archival",
+      get_archive_script("api_session_endpoints_not_logged_in")
+    );
   }
 
-  return { message: 'Utility process completed', event };
+  return { message: "Utility process completed", event };
 };

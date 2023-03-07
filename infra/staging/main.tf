@@ -52,6 +52,23 @@ module "stat_updater_lambda" {
   }
 }
 
+resource "aws_iam_role_policy" "s3_policy" {
+  role = module.stat_updater_lambda.lambda_role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "s3:GetObject",
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:s3:::${var.s3_bucket}/*"
+      },
+    ]
+  })
+}
+
 resource "aws_cloudwatch_event_rule" "schedule_stat_updates" {
   name                = "${var.stack_name}-stat-update-schedule-${var.env}"
   description         = "Trigger stat update at 03:00 UTC each day"
