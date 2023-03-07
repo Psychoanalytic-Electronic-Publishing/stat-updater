@@ -69,6 +69,29 @@ resource "aws_iam_role_policy" "s3_policy" {
   })
 }
 
+// descrivbe netywork interface
+
+resource "aws_iam_role_policy" "ec2_policy" {
+  role = module.stat_updater_lambda.lambda_role_name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:CreateNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeInstances",
+          "ec2:AttachNetworkInterface"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
 resource "aws_cloudwatch_event_rule" "schedule_stat_updates" {
   name                = "${var.stack_name}-stat-update-schedule-${var.env}"
   description         = "Trigger stat update at 03:00 UTC each day"
