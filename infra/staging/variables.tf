@@ -73,3 +73,13 @@ variable "utilities_url" {
   description = "Utilities URL"
   default     = "https://pep-gitlab-deployment.s3.amazonaws.com/data-migration/utilities.sh"
 }
+
+variable "vpc_ids" {
+  description = "VPC ID"
+  default     = ["vpc-0476e4a5a983d1193"]
+}
+
+variable "security_group_ids" {
+  description = "Security group ID"
+  default     = ["sg-0a97fbfa3e8ac6431"]
+}

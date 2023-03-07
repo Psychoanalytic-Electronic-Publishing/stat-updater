@@ -17,7 +17,12 @@ provider "aws" {
   region = var.aws_region
 }
 
-
+data "aws_subnets" "vpc" {
+  filter {
+    name   = "vpc-id"
+    values = var.vpc_ids
+  }
+}
 
 module "stat_updater_lambda" {
   source                 = "terraform-aws-modules/lambda/aws"
@@ -46,6 +51,10 @@ module "stat_updater_lambda" {
     UTILITIES_URL          = var.utilities_url
   }
 
+  vpc_subnet_ids         = data.aws_subnets.vpc.ids
+  vpc_security_group_ids = var.security_group_ids
+  attach_network_policy  = true
+
   tags = {
     stage = var.env
     stack = var.stack_name
@@ -64,29 +73,6 @@ resource "aws_iam_role_policy" "s3_policy" {
         ]
         Effect   = "Allow"
         Resource = "arn:aws:s3:::${var.s3_bucket}/*"
-      },
-    ]
-  })
-}
-
-// descrivbe netywork interface
-
-resource "aws_iam_role_policy" "ec2_policy" {
-  role = module.stat_updater_lambda.lambda_role_name
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = [
-          "ec2:DescribeNetworkInterfaces",
-          "ec2:CreateNetworkInterface",
-          "ec2:DeleteNetworkInterface",
-          "ec2:DescribeInstances",
-          "ec2:AttachNetworkInterface"
-        ]
-        Effect   = "Allow"
-        Resource = "*"
       },
     ]
   })
