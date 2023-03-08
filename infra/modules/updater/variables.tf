@@ -48,10 +48,6 @@ variable "s3_bucket" {
   description = "S3 bucket"
 }
 
-variable "sns_topic" {
-  description = "SNS topic"
-}
-
 variable "username" {
   description = "User name"
 }

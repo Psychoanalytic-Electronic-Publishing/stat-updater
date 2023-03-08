@@ -32,7 +32,6 @@ module "updater" {
   pem_key                = var.pem_key
   s3_archive_bucket      = var.s3_archive_bucket
   s3_bucket              = var.s3_bucket
-  sns_topic              = var.sns_topic
   username               = var.username
   utilities_url          = var.utilities_url
   vpc_ids                = var.vpc_ids

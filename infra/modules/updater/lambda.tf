@@ -20,7 +20,7 @@ module "stat_updater_lambda" {
     REGION                 = var.aws_region
     S3_ARCHIVE_BUCKET      = var.s3_archive_bucket
     S3_BUCKET              = var.s3_bucket
-    SNS_TOPIC              = var.sns_topic
+    SNS_TOPIC              = aws_sns_topic.user_updates.arn
     USERNAME               = var.username
     UTILITIES_URL          = var.utilities_url
   }

@@ -58,11 +58,6 @@ variable "s3_bucket" {
   default     = "pep-configuration"
 }
 
-variable "sns_topic" {
-  description = "SNS topic"
-  default     = "arn:aws:sns:us-east-1:547758924192:gitlab-status-topic"
-}
-
 variable "username" {
   description = "User name"
   default     = "ubuntu"
