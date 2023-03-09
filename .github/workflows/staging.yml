@@ -21,11 +21,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ENV_VARS: "TF_VAR_mysql_username=${{ secrets.MYSQL_USERNAME }}\n\
         TF_VAR_mysql_password=${{ secrets.MYSQL_PASSWORD }}\n\
-        TF_VAR_archive_threshold_days=${{ env.ARCHIVE_THRESHOLD_DAYS }}\n\
-        TF_VAR_host=$EC2_HOSTNAME\n\
-        TF_VAR_mysql_host=$MYSQL_HOSTNAME\n\
-        TF_VAR_mysql_schema=$MYSQL_SCHEMA\n\
-        TF_VAR_pem_key=$PEM_KEY_PATH\n\
-        TF_VAR_s3_bucket=$PEM_KEY_BUCKET\n\
-        TF_VAR_username=$EC2_USERNAME\n\
-        TF_VAR_utilities_url=$UTILITIES_URL"
+        TF_VAR_archive_threshold_days=${{ vars.ARCHIVE_THRESHOLD_DAYS }}\n\
+        TF_VAR_host=${{ vars.EC2_HOSTNAME }}\n\
+        TF_VAR_mysql_host=${{ vars.MYSQL_HOSTNAME }}\n\
+        TF_VAR_mysql_schema=${{ vars.MYSQL_SCHEMA }}\n\
+        TF_VAR_pem_key=${{ vars.PEM_KEY_PATH }}\n\
+        TF_VAR_s3_bucket=${{ vars.PEM_KEY_BUCKET }}\n\
+        TF_VAR_username=${{ vars.EC2_USERNAME }}\n\
+        TF_VAR_utilities_url=${{ vars.UTILITIES_URL }}"
