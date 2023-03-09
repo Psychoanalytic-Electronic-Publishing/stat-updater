@@ -15,7 +15,6 @@ variable "stack_name" {
 
 variable "archive_threshold_days" {
   description = "Number of days to archive"
-  default     = 30
 }
 
 variable "host" {
