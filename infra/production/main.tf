@@ -30,7 +30,6 @@ module "updater" {
   mysql_username         = var.mysql_username
   mysql_password         = var.mysql_password
   pem_key                = var.pem_key
-  s3_archive_bucket      = var.s3_archive_bucket
   s3_bucket              = var.s3_bucket
   username               = var.username
   utilities_url          = var.utilities_url

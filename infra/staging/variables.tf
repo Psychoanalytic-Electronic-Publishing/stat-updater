@@ -49,13 +49,8 @@ variable "pem_key" {
   default     = "pep-build-machine.pem"
 }
 
-variable "s3_archive_bucket" {
-  description = "S3 archive bucket"
-  default     = "pep-sessions-archival/staging/"
-}
-
 variable "s3_bucket" {
-  description = "S3 bucket"
+  description = "S3 bucket containing pem key"
   default     = "pep-configuration"
 }
 

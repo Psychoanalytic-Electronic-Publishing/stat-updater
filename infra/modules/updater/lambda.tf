@@ -18,7 +18,7 @@ module "stat_updater_lambda" {
     MYSQL_USERNAME         = var.mysql_username
     PEM_KEY                = var.pem_key
     REGION                 = var.aws_region
-    S3_ARCHIVE_BUCKET      = var.s3_archive_bucket
+    S3_ARCHIVE_BUCKET      = aws_s3_bucket.archive.id
     S3_BUCKET              = var.s3_bucket
     SNS_TOPIC              = aws_sns_topic.user_updates.arn
     USERNAME               = var.username

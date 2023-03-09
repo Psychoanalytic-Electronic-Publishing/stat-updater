@@ -40,12 +40,8 @@ variable "pem_key" {
   description = "PEM key"
 }
 
-variable "s3_archive_bucket" {
-  description = "S3 archive bucket"
-}
-
 variable "s3_bucket" {
-  description = "S3 bucket"
+  description = "S3 bucket containing pem key"
 }
 
 variable "username" {
