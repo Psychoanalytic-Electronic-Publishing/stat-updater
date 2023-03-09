@@ -22,4 +22,4 @@ jobs:
       ENV_VARS: >
         TF_VAR_mysql_host=test123\n
         TF_VAR_mysql_username=test456\n
-        TF_VAR_mysql_password=test789\n
+        TF_VAR_mysql_password=test789
