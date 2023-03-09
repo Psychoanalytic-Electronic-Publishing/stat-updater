@@ -3,7 +3,7 @@ name: Plan and deploy PEP-Web to production
 on:
   push:
     branches:
-      - master
+      - main
 
 concurrency:
   group: ${{ github.ref }}-deploy
