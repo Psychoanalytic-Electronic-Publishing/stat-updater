@@ -25,6 +25,7 @@ variable "host" {
 
 variable "mysql_host" {
   description = "MySQL host name"
+  default     = "staging.c6re6qczl2ae.us-east-1.rds.amazonaws.com"
 }
 
 variable "mysql_schema" {
