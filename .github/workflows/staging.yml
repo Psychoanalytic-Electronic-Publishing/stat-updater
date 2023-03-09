@@ -20,6 +20,6 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ENV_VARS: >
-        TEST1\n
-        TEST2\n
-        TEST3\n
+        TF_VAR_mysql_host=test123\n
+        TF_VAR_mysql_username=test456\n
+        TF_VAR_mysql_password=test789\n
