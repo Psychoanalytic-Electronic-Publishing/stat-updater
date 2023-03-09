@@ -35,7 +35,6 @@ variable "mysql_schema" {
 
 variable "mysql_username" {
   description = "MySQL user name"
-  default     = "nrshapiro"
 }
 
 variable "mysql_password" {
