@@ -22,6 +22,7 @@ jobs:
           echo "archive_threshold_days=${{ vars.ARCHIVE_THRESHOLD_DAYS }}" >> $GITHUB_OUTPUT
 
   infrastructure:
+    needs: [env]
     uses: jordanallen-dev/reusable-terraform-workflow/.github/workflows/terraform.yml@main
     with:
       module-path: infra/staging
