@@ -15,11 +15,25 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       archive_threshold_days: ${{ steps.set-outputs.outputs.archive_threshold_days}}
+      host: ${{ steps.set-outputs.outputs.host }}
+      mysql_host: ${{ steps.set-outputs.outputs.mysql_host }}
+      mysql_schema: ${{ steps.set-outputs.outputs.mysql_schema }}
+      pem_key: ${{ steps.set-outputs.outputs.pem_key }}
+      s3_bucket: ${{ steps.set-outputs.outputs.s3_bucket }}
+      username: ${{ steps.set-outputs.outputs.username }}
+      utilities_url: ${{ steps.set-outputs.outputs.utilities_url }}
     steps:
       - name: Set output
         id: set-outputs
         run: |
           echo "archive_threshold_days=${{ vars.ARCHIVE_THRESHOLD_DAYS }}" >> $GITHUB_OUTPUT
+          echo "host=${{ vars.EC2_HOSTNAME }}" >> $GITHUB_OUTPUT
+          echo "mysql_host=${{ vars.MYSQL_HOSTNAME }}" >> $GITHUB_OUTPUT
+          echo "mysql_schema=${{ vars.MYSQL_SCHEMA }}" >> $GITHUB_OUTPUT
+          echo "pem_key=${{ vars.PEM_KEY_PATH }}" >> $GITHUB_OUTPUT
+          echo "s3_bucket=${{ vars.PEM_KEY_BUCKET }}" >> $GITHUB_OUTPUT
+          echo "username=${{ vars.EC2_USERNAME }}" >> $GITHUB_OUTPUT
+          echo "utilities_url=${{ vars.UTILITIES_URL }}" >> $GITHUB_OUTPUT
 
   infrastructure:
     needs: [env]
@@ -33,4 +47,11 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ENV_VARS: "TF_VAR_mysql_username=${{ secrets.MYSQL_USERNAME }}\n\
         TF_VAR_mysql_password=${{ secrets.MYSQL_PASSWORD }}\n\
-        TF_VAR_archive_threshold_days=${{ needs.env.outputs.archive_threshold_days }}"
+        TF_VAR_archive_threshold_days=${{ needs.env.outputs.archive_threshold_days }} \n\
+        TF_VAR_host=${{ needs.env.outputs.host }}\n\
+        TF_VAR_mysql_host=${{ needs.env.outputs.mysql_host }}\n\
+        TF_VAR_mysql_schema=${{ needs.env.outputs.mysql_schema }}\n\
+        TF_VAR_pem_key=${{ needs.env.outputs.pem_key }}\n\
+        TF_VAR_s3_bucket=${{ needs.env.outputs.s3_bucket }}\n\
+        TF_VAR_username=${{ needs.env.outputs.username }}\n\
+        TF_VAR_utilities_url=${{ needs.env.outputs.utilities_url }}"
