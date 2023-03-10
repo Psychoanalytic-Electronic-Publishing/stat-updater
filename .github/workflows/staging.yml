@@ -13,6 +13,7 @@ jobs:
   env:
     name: "Setup dynamic environment variables"
     runs-on: ubuntu-latest
+    environment: staging-vars
     outputs:
       archive_threshold_days: ${{ steps.set-outputs.outputs.archive_threshold_days}}
       host: ${{ steps.set-outputs.outputs.host }}
