@@ -15,12 +15,10 @@ variable "stack_name" {
 
 variable "archive_threshold_days" {
   description = "Number of days to archive"
-  default     = 30
 }
 
 variable "host" {
   description = "Host name"
-  default     = "ec2-54-210-185-163.compute-1.amazonaws.com"
 }
 
 variable "mysql_host" {
@@ -29,7 +27,6 @@ variable "mysql_host" {
 
 variable "mysql_schema" {
   description = "MySQL schema"
-  default     = "opascentral"
 }
 
 variable "mysql_username" {
@@ -43,22 +40,18 @@ variable "mysql_password" {
 
 variable "pem_key" {
   description = "PEM key"
-  default     = "pep-build-machine.pem"
 }
 
 variable "s3_bucket" {
   description = "S3 bucket containing pem key"
-  default     = "pep-configuration"
 }
 
 variable "username" {
   description = "User name"
-  default     = "ubuntu"
 }
 
 variable "utilities_url" {
   description = "Utilities URL"
-  default     = "https://pep-gitlab-deployment.s3.amazonaws.com/data-migration/utilities.sh"
 }
 
 variable "vpc_ids" {
