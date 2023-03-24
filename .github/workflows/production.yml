@@ -43,6 +43,7 @@ jobs:
       module-path: infra/production
       apply-environment: production
       node-version: 16.0.0
+      s3-cache-bucket: pep-terraform-build-cache
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
